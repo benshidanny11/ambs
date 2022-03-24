@@ -1,0 +1,247 @@
+@import url("https://fonts.googleapis.com/css2?family=Comfortaa&display=swap");
+
+html {
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: "Comfortaa", cursive;
+}
+
+.body-bg {
+  background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+}
+
+.login {
+  width: 360px;
+  padding: 8% 0 0;
+  margin: auto;
+}
+
+.form {
+  position: relative;
+  z-index: 1;
+  background: #ffffff;
+  border-radius: 10px;
+  max-width: 360px;
+  margin: 0 auto 100px;
+  padding: 45px;
+  text-align: center;
+}
+.form-reg {
+  position: relative;
+  z-index: 1;
+  padding: 2rem;
+}
+
+.form input {
+  outline: 0;
+  background: #f2f2f2;
+  width: 100%;
+  border: 0;
+  border-radius: 5px;
+  margin: 0 0 15px;
+  padding: 15px;
+  box-sizing: border-box;
+  font-size: 14px;
+  font-family: "Comfortaa", cursive;
+}
+
+.form input:focus {
+  background: #dbdbdb;
+}
+
+.form button,.btn-primary {
+  font-family: "Comfortaa", cursive;
+  outline: 0;
+  background: #4b6cb7;
+  border: 0;
+  border-radius: 5px;
+  padding: 15px;
+  color: #ffffff;
+  font-size: 14px;
+  -webkit-transition: all 0.3 ease;
+  transition: all 0.3 ease;
+  cursor: pointer;
+}
+
+.form button:active,.btn-primary:hover {
+  background: #395591;
+}
+
+.form span {
+  font-size: 75px;
+  color: #4b6cb7;
+}
+
+body {
+    background-color: #fff;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.01em;
+    color: #39464e;
+  }
+  
+  .navbar-default {
+    background-color: #fff;
+    margin-left: 200px;
+  }
+  
+  /*main side bar*/
+  .msb {
+    width: 250px;
+    background-color: #f5f7f9;
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: auto;
+    min-height: 100%;
+    overflow-y: auto;
+    white-space: nowrap;
+    height: 100%;
+    z-index: 1;
+    border-right: 1px solid #ddd;
+  }
+  .msb .navbar {
+    border: none;
+    margin-left: 0;
+    background-color: inherit;
+  }
+  .msb .navbar-header {
+    width: 100%;
+    border-bottom: 1px solid #e7e7e7;
+    margin-bottom: 20px;
+    background-color: #f5f7f9;
+    display: flex;
+    justify-content: center;
+  }
+  .msb .navbar-nav .panel {
+    border: 0 none;
+    box-shadow: none;
+    margin: 0;
+    background: inherit;
+  }
+  .msb .navbar-nav li {
+    display: block;
+    width: 100%;
+  }
+  .msb .navbar-nav li a {
+    padding: 15px;
+    color: #5f5f5f;
+  }
+  .msb .navbar-nav li a .glyphicon,
+  .msb .navbar-nav li a .fa {
+    margin-right: 8px;
+  }
+  .msb .nb {
+    padding-top: 5px;
+    padding-left: 10px;
+    margin-bottom: 30px;
+    overflow: hidden;
+  }
+  
+  ul.nv,
+  ul.ns {
+    position: relative;
+    padding: 0;
+    list-style: none;
+  }
+  .nv li {
+    display: block;
+    position: relative;
+  }
+  .nv li::before {
+    clear: both;
+    content: "";
+    display: table;
+  }
+  .nv li a {
+    color: #444;
+    padding: 10px 25px;
+    display: block;
+  }
+  .nv li a .ic {
+    font-size: 16px;
+    margin-right: 5px;
+    font-weight: 300;
+    display: inline-block;
+  }
+  .nv .ns li a {
+    padding: 10px 50px;
+  }
+  
+  .mcw {
+    margin-left: 250px;
+    min-height: 100%;
+  }
+  a,
+  a:focus,
+  a:hover {
+    text-decoration: none;
+  }
+  
+  .inbox .container-fluid {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .inbox ul,
+  .inbox li {
+    margin: 0;
+    padding: 0;
+  }
+  .inbox ul li {
+    list-style: none;
+  }
+  .inbox ul li a {
+    display: block;
+    padding: 10px 20px;
+  }
+
+  .mnb {
+    margin-left: 250px;
+    background-color:#4b6cb7;
+    padding: .5rem 1rem;
+  }
+ 
+  .side-links {
+      margin-bottom: 1.5rem;
+      font-weight: bold;
+      border-color:#4b6cb7 ;
+      font-size: 16px;
+  }
+
+  .side-links>a {
+    color: #4b6cb7 !important;
+  }
+
+  .side-links>a:hover {
+    color: #022e94;
+  }
+
+  .active {
+    color: #022e94; 
+  }
+
+  .card-body {
+      margin: 1rem !important;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .form-control:focus {
+    outline: none !important;
+    border: 1px solid #ced4da;
+    box-shadow: none;
+  }
+
+  .image-cust {
+    width: 200px;
+    height: 400px;
+  }
+
+  .app-title {
+    font-weight: bolder;
+    color: #022e94;
+  }
