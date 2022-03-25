@@ -17,11 +17,12 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
             $_SESSION["fullname"] = $row['fullname'];
             $_SESSION["username"] = $row['username'];  
             if ($row['role'] == 'manager') {
-                header('Location: manager/index.php');
+               header('Location: manager/index.php');
             } else {
                 header('Location: teller/index.php');
             }
         } else {
+            echo $count;
             header('Location: index.php?err=invalid');
         }
     } else {

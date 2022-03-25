@@ -2,8 +2,9 @@
 include("../database/connect.php");
 include("../displayerrors.php");
 include("./checkuser.php");
-$sql_all_customers = "SELECT * from customers INNER JOIN accounts ON customers.custid=accounts.coutomerid ORDER BY custid DESC";
-$result = $mysqli->query($sql_all_customers);
+$sql_transactions = "SELECT firstname,lastname,dob,nationalid,photo,address,email,phonenumber,accounts.accountnumber as accn,transactions.balance,
+amount,transactiontype,transactions.createdon,transactions.userid from customers INNER JOIN accounts ON customers.custid=accounts.coutomerid INNER JOIN transactions ON accounts.accountnumber=transactions.accounnumber ORDER BY transactions.transactionid DESC;";
+$result = $mysqli->query($sql_transactions);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -12,13 +13,13 @@ $result = $mysqli->query($sql_all_customers);
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ambs :: Teller dashboard</title>
+    <title>Ambs :: teller dashboard</title>
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" />
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
 
     <link rel="stylesheet" href="../assets/styles/styles.css">
 </head>
@@ -69,12 +70,11 @@ $result = $mysqli->query($sql_all_customers);
                         <table id="example" class="table" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
-                                    <th>Image</th>
-                                    <th>First name</th>
-                                    <th>Last name</th>
+                                    <th>Full name</th>
                                     <th>Phone number</th>
                                     <th>Account number</th>
-                                    <th>Options</th>
+                                    <th>Transaction amount</th>
+                                    <th>Transaction date</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -82,17 +82,11 @@ $result = $mysqli->query($sql_all_customers);
                                 if ($result->num_rows > 0) {
                                     while ($row = $result->fetch_array()) {
                                         echo '<tr>
-                                                <td><img src="../manager/' . $row['photo'] . '" width="50" height="50"/></td>
-                                                <td>' . $row['firstname'] . '</td>
-                                                <td>' . $row['lastname'] . '</td>
+                                                <td>' . $row['firstname'] . ' ' . $row['lastname'] . '</td>
                                                 <td>' . $row['phonenumber'] . '</td>
-                                                <td>' . $row['accountnumber'] . '</td>
-                                                <td>
-                                                    <div class="d-flex justify-content-between actions-teller">
-                                                    <a href="account.php?cid=' . $row['custid'] . '" class="btn btn-primary">View details</a>
-                                                    <a href="createtrans.php?cid=' . $row['custid'] . '" class="btn btn-success">Create transaction</a>
-                                                    </div>
-                                                </td>
+                                                <td>' . $row['accn'] . '</td>
+                                                <td>' . $row['amount'] . '</td>
+                                                <td>' . $row['createdon'] . '</td>
                                                 </tr>';
                                     }
                                 } else {
@@ -117,9 +111,6 @@ $result = $mysqli->query($sql_all_customers);
             "autoWidth": false,
             "lengthMenu": [10]
         });
-       // $(".dataTables_filter").attr("placehol")
-      const searchBox=  document.getElementsByClassName("dataTables_filter")[0].children[0].children[0];
-      searchBox.setAttribute("placeholder","Type account no,name,...");
     </script>
 </body>
 

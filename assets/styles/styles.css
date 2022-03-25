@@ -4,9 +4,6 @@ html {
   margin: 0;
   padding: 0;
 }
-body {
-  font-family: "Comfortaa", cursive;
-}
 
 .body-bg {
   background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
@@ -51,13 +48,25 @@ body {
   background: #dbdbdb;
 }
 
-.form button,.btn-primary {
+.form button {
   font-family: "Comfortaa", cursive;
   outline: 0;
   background: #4b6cb7;
   border: 0;
   border-radius: 5px;
-  padding: 15px;
+  color: #ffffff;
+  font-size: 14px;
+  padding: .6rem 3rem;
+  -webkit-transition: all 0.3 ease;
+  transition: all 0.3 ease;
+  cursor: pointer;
+}
+
+.btn-primary {
+  outline: 0;
+  background: #4b6cb7;
+  border: 0;
+  border-radius: 5px;
   color: #ffffff;
   font-size: 14px;
   -webkit-transition: all 0.3 ease;
@@ -244,4 +253,16 @@ body {
   .app-title {
     font-weight: bolder;
     color: #022e94;
+  }
+
+  .logout-container>a,.dash-msg-cont>h3 {
+   color: #fff;
+  }
+
+  .logout-container>a {
+    font-size: 30px;
+  }
+
+  .actions-teller {
+    width: 300px !important;
   }

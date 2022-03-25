@@ -5,9 +5,10 @@ include("./checkuser.php");
 $sql_customer = "SELECT * from customers WHERE custid=" . $_GET['cid'];
 $result = $mysqli->query($sql_customer);
 $row = $result->fetch_array();
-$sql_account = "SELECT * from accounts WHERE coutomerid=" . $_GET['cid'];
-$result_acc = $mysqli->query($sql_account);
-$row_acc = $result_acc->fetch_array();
+$cid = $_GET['cid'];
+$sql_acc_statement = "SELECT firstname,lastname,dob,nationalid,photo,address,customers.email,customers.phonenumber,accounts.accountnumber as accn,transactions.balance,
+amount,transactiontype,transactions.createdon,transactions.userid from customers INNER JOIN accounts ON customers.custid=accounts.coutomerid INNER JOIN transactions ON accounts.accountnumber=transactions.accounnumber WHERE accounts.coutomerid=$cid ORDER BY transactions.transactionid ASC;";
+$result_acc_statement = $mysqli->query($sql_acc_statement);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -25,11 +26,11 @@ $row_acc = $result_acc->fetch_array();
 </head>
 
 <body>
-    
-    <?php 
+
+    <?php
     include("appbar.php");
     include("sidebar.php")
-     ?>
+    ?>
     <div class="mcw">
         <div class="cv">
             <div>
@@ -42,7 +43,7 @@ $row_acc = $result_acc->fetch_array();
                                         <div class="row">
                                             <div class="col-10">
                                                 <?php
-                                                echo '<h4>' . $row['firstname'] . ' ' . $row['lastname'] . '\'s profile</h4>';
+                                                echo '<h4>' . $row['firstname'] . ' ' . $row['lastname'] . '\'s account statement</h4>';
                                                 ?>
                                             </div>
                                             <div class="col-2">
@@ -54,26 +55,35 @@ $row_acc = $result_acc->fetch_array();
                                                 <div class="col-4">
                                                     <img src="<?php echo $row['photo'] ?>" width="330" height="450" />
                                                 </div>
-                                                <div class="col-8">
-                                                    <h5>Personal information</h5>
-                                                    <hr>
-                                                    <p>Full name: <?php echo $row['firstname'] . ' ' . $row['lastname'] ?></p>
-                                                    <p>Email: <?php echo $row['email'] ?></p>
-                                                    <p>Phone number: <?php echo $row['phonenumber'] ?></p>
-                                                    <p>Address: <?php echo $row['address'] ?></p>
-                                                    <p>National id: <?php echo $row['nationalid'] ?></p>
-                                                    <p>Date of birth: <?php echo $row['dob'] ?></p>
-
-                                                    <h5>Account information</h5>
-                                                    <hr>
-                                                    <p>Account number: <?php echo $row_acc['accountnumber'] ?></p>
-                                                    <p>Date of creation: <?php echo $row_acc['createdon'] ?></p>
-                                                    <p>Balance: <?php echo $row_acc['balance'].' FRW' ?></p>
-                                                    <div class="d-flex justify-content-between mt-5">
-                                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">Delete customer</button>
-                                                        <a href="update.php?cid=<?php echo $_GET['cid'] ?>" class="btn btn-primary">Update customer</a>
-                                                        <a href="accountstatement.php?cid=<?php echo $_GET['cid'] ?>" class="btn btn-success">Account satement</a>
-                                                    </div>
+                                                <div class="col-8 statement-container">
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th><b>Date</b></th>
+                                                                <th><b>Account number</b></th>
+                                                                <th><b>Trasaction type</b></th>
+                                                                <th><b>Transaction amount</b></th>
+                                                                <th><b>Balance</b></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <?php
+                                                            if ($result_acc_statement->num_rows > 0) {
+                                                                while ($row_acc_st = $result_acc_statement->fetch_array()) {
+                                                                    echo '<tr>
+                                                                        <td>' . $row_acc_st['createdon'].'</td>
+                                                                        <td>' . $row_acc_st['accn'] . '</td>
+                                                                        <td>' . $row_acc_st['transactiontype'] . '</td>
+                                                                        <td>' . $row_acc_st['amount'] . '</td>
+                                                                        <td>' . $row_acc_st['balance'] . ' FRW</td>
+                                                                        </tr>';
+                                                                }
+                                                            } else {
+                                                                echo '<tr ><td rowspan="6">No transactions made on this account</td></tr>';
+                                                            }
+                                                            ?>
+                                                        </tbody>
+                                                    </table>
                                                 </div>
                                             </div>
                                         </div>
