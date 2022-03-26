@@ -1,6 +1,7 @@
 <?php
 include("../database/connect.php");
 include("../displayerrors.php");
+include("../utils/sendmail.php");
 session_start();
 //echo exec('whoami');
 if(isset($_POST['submit'])){
@@ -38,7 +39,12 @@ if(isset($_POST['submit'])){
                             $createaccount = "INSERT INTO accounts(accountnumber,coutomerid,createdon,userid,balance) 
                             VALUES('$account_n','$custid','$datetime','$userid',0.0)";
                             if ($mysqli->query($createaccount) === TRUE) {
-                                header('Location: index.php?message=success');
+                                $message='Dear '.$firstname.',<br>';
+                                $message.='Your AMBS account has been created successfully!<br>';
+                                $message.='Account number: '.$account_n.'.<br>';
+                                $message.='Initial balance: 0.<br>';
+                                $mail_sent= sendMail($email,$filename.' '.$lastname,$firstname.'\'s account creation confirmation',$message);
+                                header('Location: index.php?message=success&sent='.$mail_sent);
                             }else {
                                 echo "Error: "  ."<br>" . $mysqli->error; 
                             }

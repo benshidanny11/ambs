@@ -266,3 +266,8 @@ body {
   .actions-teller {
     width: 300px !important;
   }
+
+  .statement-container {
+    height: 450px;
+    overflow: scroll;
+  }

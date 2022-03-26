@@ -1,12 +1,13 @@
 <?php
 include("../database/connect.php");
 include("../displayerrors.php");
+include("../utils/sendmail.php");
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
 if (isset($_POST['submit'])) {
-    $sql_customer = "SELECT balance from customers INNER JOIN accounts ON customers.custid=accounts.coutomerid WHERE custid=" . $_GET['cid'];
+    $sql_customer = "SELECT firstname,lastname,email,balance from customers INNER JOIN accounts ON customers.custid=accounts.coutomerid WHERE custid=" . $_GET['cid'];
     $result = $mysqli->query($sql_customer);
     $row = $result->fetch_array();
     $accn = $_POST['accn'];
@@ -17,11 +18,15 @@ if (isset($_POST['submit'])) {
     
     if ($transtype == 'deposit') {
         $balance = $row['balance'] + floatval($amount);
+        $credit_or_debit='credited';
+        $sub_credit='credit';
     } else if($transtype == 'withdraw'){
         if (floatval($amount) > $row['balance']) {
             header('Location: index.php?message=insufbal');
         } else {
-            $balance = $row['balance'] - floatval($amount);;
+            $balance = $row['balance'] - floatval($amount);
+            $credit_or_debit='debited';
+            $sub_credit='debit';
         }
     }
 
@@ -30,7 +35,11 @@ if (isset($_POST['submit'])) {
     if ($mysqli->query($createtrans) === TRUE) {
         $updateacc = "UPDATE accounts SET balance='$balance' WHERE accountnumber='$accn'";
         if ($mysqli->query($updateacc) === TRUE) {
-            header('Location: index.php?message=success');
+            $message='Dear '.$row['firstname'].',<br><br>';
+            $message.='You have been '.$credit_or_debit.' with '.$amount.' RWF on your account '.$accn.'!<br><br>';
+            $message.='New balance: '.$balance.' RWF.<br><br>';
+            $mail_sent= sendMail($row['email'],$row['firstname'].' '.$row['lastname'],$row['firstname'].'\'s '.$sub_credit.' transaction',$message);
+            header('Location: index.php?message=success&sent='.$mail_sent);
         } else {
             echo "Error: " . "<br>" . $mysqli->error;
         }

@@ -70,16 +70,16 @@ $result = $mysqli->query($sql_transactions);
                         }
                         ?>
                         <div class="row">
-                            <div class="col-7">
+                            <div class="col-6">
                                 <h4>Transaction report</h4>
                             </div>
-                            <div class="col-5">
+                            <div class="col-6">
                               
                                     <form action="reports.php" method="get">
                                     <div class="d-flex justify-content-between">
-                                        <input type="date" name="from" required>
+                                        From: <input type="date" name="from" required>
                                          <span>~</span>
-                                        <input type="date" name="to" required>
+                                        To: <input type="date" name="to" required>
                                         <button type="submit"name="filterdata" class="btn btn-success"><i class="fa fa-filter" aria-hidden="true"></i> Filter</button>
                                     </div>
                                     </form>
