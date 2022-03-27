@@ -255,12 +255,16 @@ body {
     color: #022e94;
   }
 
-  .logout-container>a,.dash-msg-cont>h3 {
+  .logout-container>a, .logout-container>h5,.dash-msg-cont>h3 {
    color: #fff;
   }
 
   .logout-container>a {
     font-size: 30px;
+  }
+
+  .logout-container{
+   width: 180px;
   }
 
   .actions-teller {
@@ -270,4 +274,8 @@ body {
   .statement-container {
     height: 450px;
     overflow: scroll;
+  }
+
+  .acc-stats {
+    font-size: 12px;
   }

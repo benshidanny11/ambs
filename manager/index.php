@@ -50,14 +50,17 @@ $result = $mysqli->query($sql_all_customers);
                                 echo '<div class="alert alert-success">Cutomer account has been updated! </div>
                                                 <script>setTimeout(()=>{location.href="index.php";},7000);</script>';
                             } else if ($_GET['message'] == "success-del") {
-                                echo '<div class="alert alert-success">Cutomer account has been deleted! </div>
+                                echo '<div class="alert alert-success">Cutomer account status has been changed! </div>
+                                                <script>setTimeout(()=>{location.href="index.php";},7000);</script>';
+                            } else if ($_GET["message"] == "exists-upd") {
+                                echo '<div class="alert alert-warning">It looks like there are other customers with the same email,phone or id, please try another. </div>
                                                 <script>setTimeout(()=>{location.href="index.php";},7000);</script>';
                             }
                         }
                         ?>
                         <div class="row">
                             <div class="col-10">
-                                <h4>All accounts</h4>
+                                <h4>All customers</h4>
                             </div>
                             <div class="col-2">
 
@@ -88,7 +91,10 @@ $result = $mysqli->query($sql_all_customers);
                                                                <td>' . $row['lastname'] . '</td>
                                                                <td>' . $row['phonenumber'] . '</td>
                                                                <td>' . $row['address'] . '</td>
-                                                               <td><a href="customer.php?cid=' . $row['custid'] . '">View details</a></td>
+                                                               <td><div>
+                                                                   <a href="customer.php?cid=' . $row['custid'] . '" class="btn btn-primary">View details</a>
+                                                                   <a href="accountstatement.php?cid=' . $row['custid'] . '" class="btn btn-success">Account statement</a>
+                                                                   </div></td>
                                                              <tr/>';
                                     }
                                 } else {

@@ -2,8 +2,9 @@
 include("../database/connect.php");
 include("../displayerrors.php");
 include("./checkuser.php");
+$userid=$_SESSION['userid'];
 $sql_transactions = "SELECT firstname,lastname,dob,nationalid,photo,address,email,phonenumber,accounts.accountnumber as accn,transactions.balance,
-amount,transactiontype,transactions.createdon,transactions.userid from customers INNER JOIN accounts ON customers.custid=accounts.coutomerid INNER JOIN transactions ON accounts.accountnumber=transactions.accounnumber ORDER BY transactions.transactionid DESC;";
+amount,transactiontype,transactions.createdon,transactions.userid from customers INNER JOIN accounts ON customers.custid=accounts.coutomerid INNER JOIN transactions ON accounts.accountnumber=transactions.accounnumber WHERE transactions.userid=$userid ORDER BY transactions.transactionid DESC;";
 $result = $mysqli->query($sql_transactions);
 ?>
 <!DOCTYPE html>
@@ -74,6 +75,7 @@ $result = $mysqli->query($sql_transactions);
                                     <th>Phone number</th>
                                     <th>Account number</th>
                                     <th>Transaction amount</th>
+                                    <th>Transaction type</th>
                                     <th>Transaction date</th>
                                 </tr>
                             </thead>
@@ -86,6 +88,7 @@ $result = $mysqli->query($sql_transactions);
                                                 <td>' . $row['phonenumber'] . '</td>
                                                 <td>' . $row['accn'] . '</td>
                                                 <td>' . $row['amount'] . '</td>
+                                                <td>' . $row['transactiontype'] . '</td>
                                                 <td>' . $row['createdon'] . '</td>
                                                 </tr>';
                                     }

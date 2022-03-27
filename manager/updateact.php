@@ -10,14 +10,23 @@ if (isset($_POST['submit'])) {
     $email = $_POST['email'];
     $phone = $_POST['phone'];
     $nationalid = $_POST['nid'];
-    $updatecustomer = "UPDATE customers SET firstname='$firstname',lastname='$lastname',dob='$dob',nationalid='$nationalid',address='$address',email='$email',phonenumber='$phone' WHERE custid=".$_GET['cid'];
-
-    if ($mysqli->query($updatecustomer) === TRUE) {
-        header('Location: index.php?message=success-upd');
+    $sqlcheckdup = "SELECT * FROM customers where email='$email' OR phonenumber='$phone' OR nationalid=$nationalid AND  custid <> " . $_GET['cid'];
+    $updatecustomer = "UPDATE customers SET firstname='$firstname',lastname='$lastname',dob='$dob',nationalid='$nationalid',address='$address',email='$email',phonenumber='$phone' WHERE custid=" . $_GET['cid'];
+    if ($result = $mysqli->query($sqlcheckdup)) {
+        if ($result->num_rows > 0) {
+            header('Location: index.php?message=exists-upd');
+        }else {
+            if ($mysqli->query($updatecustomer) === TRUE) {
+                header('Location: index.php?message=success-upd');
+            } else {
+                echo "Error: " . "<br>" . $mysqli->error;
+            }
+        }
+       
     } else {
         echo "Error: " . "<br>" . $mysqli->error;
+        $mysqli->close();
     }
-    $mysqli->close();
 } else {
     header('Location: index.php?message=fillall');
 }

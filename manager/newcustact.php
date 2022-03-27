@@ -17,7 +17,7 @@ if(isset($_POST['submit'])){
     $datetime = date("Y/m/d h:i:s");
     $userid = $_SESSION['userid'];
     
-    $sqlcheckdup = "SELECT * FROM customers where email='$email' OR phonenumber='$phone'";
+    $sqlcheckdup = "SELECT * FROM customers where email='$email' OR phonenumber='$phone' OR nationalid=$nationalid";
     
     
     if($result = $mysqli->query($sqlcheckdup)){
@@ -43,6 +43,7 @@ if(isset($_POST['submit'])){
                                 $message.='Your AMBS account has been created successfully!<br>';
                                 $message.='Account number: '.$account_n.'.<br>';
                                 $message.='Initial balance: 0.<br>';
+                                $message.='Thank you for choosing to work with us!<br><br>';
                                 $mail_sent= sendMail($email,$filename.' '.$lastname,$firstname.'\'s account creation confirmation',$message);
                                 header('Location: index.php?message=success&sent='.$mail_sent);
                             }else {

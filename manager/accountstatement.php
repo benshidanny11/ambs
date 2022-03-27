@@ -9,6 +9,8 @@ $cid = $_GET['cid'];
 $sql_acc_statement = "SELECT firstname,lastname,dob,nationalid,photo,address,customers.email,customers.phonenumber,accounts.accountnumber as accn,transactions.balance,
 amount,transactiontype,transactions.createdon,transactions.userid from customers INNER JOIN accounts ON customers.custid=accounts.coutomerid INNER JOIN transactions ON accounts.accountnumber=transactions.accounnumber WHERE accounts.coutomerid=$cid ORDER BY transactions.transactionid ASC;";
 $result_acc_statement = $mysqli->query($sql_acc_statement);
+$count_credits = 0;
+$count_debits = 0;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -71,12 +73,17 @@ $result_acc_statement = $mysqli->query($sql_acc_statement);
                                                             if ($result_acc_statement->num_rows > 0) {
                                                                 while ($row_acc_st = $result_acc_statement->fetch_array()) {
                                                                     echo '<tr>
-                                                                        <td>' . $row_acc_st['createdon'].'</td>
+                                                                        <td>' . $row_acc_st['createdon'] . '</td>
                                                                         <td>' . $row_acc_st['accn'] . '</td>
                                                                         <td>' . $row_acc_st['transactiontype'] . '</td>
                                                                         <td>' . $row_acc_st['amount'] . '</td>
                                                                         <td>' . $row_acc_st['balance'] . ' FRW</td>
                                                                         </tr>';
+                                                                    if ($row_acc_st['transactiontype'] == 'deposit') {
+                                                                        $count_credits += $row_acc_st['amount'];
+                                                                    } else {
+                                                                        $count_debits += $row_acc_st['amount'];
+                                                                    }
                                                                 }
                                                             } else {
                                                                 echo '<tr ><td rowspan="6">No transactions made on this account</td></tr>';
@@ -84,6 +91,19 @@ $result_acc_statement = $mysqli->query($sql_acc_statement);
                                                             ?>
                                                         </tbody>
                                                     </table>
+                                                    <div class="card card-footer">
+                                                        <div class="row">
+                                                            <div class="col-4">
+                                                                <b class="acc-stats">Total credit amount: <?php echo $count_credits ?> RWF</b>
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <b class="acc-stats">Total debit amount: <?php echo $count_debits ?> RWF</b>
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <b class="acc-stats">Balance: <?php echo $count_credits - $count_debits ?> RWF</b>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

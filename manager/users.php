@@ -5,7 +5,7 @@ include("./checkuser.php");
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-$userid=$_SESSION['userid'];
+$userid = $_SESSION['userid'];
 $sql_all_users = "SELECT * from users WHERE userid <> $userid  ORDER BY userid DESC";
 
 $result = $mysqli->query($sql_all_users);
@@ -37,7 +37,7 @@ $result = $mysqli->query($sql_all_users);
             <div class="row">
                 <div class="col-md-12">
                     <div class="card card-body">
-                        
+
                         <?php
                         if (isset($_GET['message'])) {
                             if ($_GET["message"] == "success") {
@@ -46,15 +46,18 @@ $result = $mysqli->query($sql_all_users);
                             } else if ($_GET["message"] == "exists") {
                                 echo '<div class="alert alert-warning">User aleady exists, try to use different email,phone or national id </div>
                                                 <script>setTimeout(()=>{location.href="users.php";},7000);</script>';
-                            }else if ($_GET["message"] == "fillall") {
+                            } else if ($_GET["message"] == "fillall") {
                                 echo '<div class="alert alert-warning">Please fill all fields!</div>
                                                 <script>setTimeout(()=>{location.href="users.php";},7000);</script>';
                             } else if ($_GET['message'] == "success-upd") {
                                 echo '<div class="alert alert-success">User has been updated! </div>
                                                 <script>setTimeout(()=>{location.href="users.php";},7000);</script>';
                             } else if ($_GET['message'] == "success-del") {
-                                echo '<div class="alert alert-success">User has been deleted! </div>
+                                echo '<div class="alert alert-success">User status has been changed! </div>
                                                 <script>setTimeout(()=>{location.href="users.php";},7000);</script>';
+                            } else if ($_GET['message'] == "pass-inval") {
+                                echo '<div class="alert alert-warning">Password must be at least 8 characters in length and must contain at least one number, one upper case letter, one lower case letter and one special character.</div>
+                                <script>setTimeout(()=>{location.href="users.php";},7000);</script>';
                             }
                         }
                         ?>
@@ -77,6 +80,7 @@ $result = $mysqli->query($sql_all_users);
                                     <th>Email</th>
                                     <th>User name</th>
                                     <th>User role</th>
+                                    <th>User status</th>
                                     <th>Options</th>
                                 </tr>
                             </thead>
@@ -85,16 +89,19 @@ $result = $mysqli->query($sql_all_users);
                                 if ($result->num_rows > 0) {
 
                                     while ($row = $result->fetch_array()) {
+                                        $status = $row['ustatus'] == '1' ? 'Activated' : 'Disactivated';
+                                        $stat_option = $status == 'Activated' ? 'Disactivate' : 'Activate';
                                         echo '<tr>
                                                               
                                                 <td>' . $row['fullname'] . '</td>
                                                 <td>' . $row['phonenumber'] . '</td>
                                                 <td>' . $row['email'] . '</td>
                                                 <td>' . $row['username'] . '</td>
+                                                <td>' . $status . '</td>
                                                 <td>' . $row['role'] . '</td>
                                                 <td>
-                                                  <a href="updateuser.php?uid=' . $row['userid'] . '">Update user</a>
-                                                  <a href="deleteuser.php?uid=' . $row['userid'] . '">Delete user</a>
+                                                  <a href="updateuser.php?uid=' . $row['userid'] . '" class="btn btn-primary">Update user</a>
+                                                  <a href="deleteuser.php?uid=' . $row['userid'] . '&query=' . $stat_option . '" class="btn btn-success">' . $stat_option . '</a>
                                                 </td>
                                                 <tr/>';
                                     }

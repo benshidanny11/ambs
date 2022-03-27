@@ -42,7 +42,7 @@ $row = $result->fetch_array();
                                     <div class="card card-body">
                                         <div class="row">
                                             <div class="col-10">
-                                                <h4>Update customer account</h4>
+                                                <h4>Update customer</h4>
                                             </div>
                                             <div class="col-2">
                                             </div>
@@ -82,7 +82,7 @@ $row = $result->fetch_array();
                                                     </div>
 
                                                     <div class="form-group">
-                                                        <input class="btn btn-primary" type="submit" value="Update account" name="submit">
+                                                        <input class="btn btn-primary" type="submit" value="Update" name="submit">
                                                     </div>
                                                 </form>
                                             </div>

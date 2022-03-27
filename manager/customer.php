@@ -8,6 +8,8 @@ $row = $result->fetch_array();
 $sql_account = "SELECT * from accounts WHERE coutomerid=" . $_GET['cid'];
 $result_acc = $mysqli->query($sql_account);
 $row_acc = $result_acc->fetch_array();
+$stat_msg = $row['cstatus'] == '1' ? 'Active' : 'Dormant';
+$stat_option = $row['cstatus'] == '1' ? 'Disactivate' : 'Activate';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -25,11 +27,11 @@ $row_acc = $result_acc->fetch_array();
 </head>
 
 <body>
-    
-    <?php 
+
+    <?php
     include("appbar.php");
     include("sidebar.php")
-     ?>
+    ?>
     <div class="mcw">
         <div class="cv">
             <div>
@@ -68,9 +70,10 @@ $row_acc = $result_acc->fetch_array();
                                                     <hr>
                                                     <p>Account number: <?php echo $row_acc['accountnumber'] ?></p>
                                                     <p>Date of creation: <?php echo $row_acc['createdon'] ?></p>
-                                                    <p>Balance: <?php echo $row_acc['balance'].' FRW' ?></p>
+                                                    <p>Balance: <?php echo $row_acc['balance'] . ' FRW' ?></p>
+                                                    <p>Account status: <?php echo $stat_msg ?></p>
                                                     <div class="d-flex justify-content-between mt-5">
-                                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">Delete customer</button>
+                                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal"><?php echo $stat_option ?></button>
                                                         <a href="update.php?cid=<?php echo $_GET['cid'] ?>" class="btn btn-primary">Update customer</a>
                                                         <a href="accountstatement.php?cid=<?php echo $_GET['cid'] ?>" class="btn btn-success">Account satement</a>
                                                     </div>
@@ -82,7 +85,6 @@ $row_acc = $result_acc->fetch_array();
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -94,11 +96,11 @@ $row_acc = $result_acc->fetch_array();
                     <h5 class="modal-title" id="exampleModalCenterTitle">Delete customer accont</h5>
                 </div>
                 <div class="modal-body">
-                    Are you sure you want to delete this account, please note that it will be deleted permanently!
+                    Are you sure you want to <?php echo $stat_option ?> this account?
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                    <a class="btn btn-primary" href="deletecust.php?cid=<?php echo $_GET['cid'] ?>">Yes</a>
+                    <a class="btn btn-primary" href="deletecust.php?cid=<?php echo $_GET['cid'].'&query='.$stat_option ?>">Yes</a>
                 </div>
             </div>
         </div>

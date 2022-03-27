@@ -2,20 +2,24 @@
 include("../database/connect.php");
 include("../displayerrors.php");
 include("./checkuser.php");
-if(isset($_GET['from'])){
-    $date=date_create("2013-03-15");
-    date_format(date_create("2013-03-15"),"Y/m/d H:i:s");
+if (isset($_GET['from'])) {
+    $date = date_create("2013-03-15");
+    date_format(date_create("2013-03-15"), "Y/m/d H:i:s");
 
-    $datefrom=date("Y/m/d H:i:s", strtotime($_GET['from'].' 00:00:00'));
-    $dateto=date("Y/m/d H:i:s", strtotime($_GET['to'].' 23:59:59'));
+    $datefrom = date("Y/m/d H:i:s", strtotime($_GET['from'] . ' 00:00:00'));
+    $dateto = date("Y/m/d H:i:s", strtotime($_GET['to'] . ' 23:59:59'));
     $sql_transactions = "SELECT firstname,lastname,dob,nationalid,photo,address,customers.email,customers.phonenumber,accounts.accountnumber as accn,transactions.balance,
 amount,transactiontype,transactions.createdon,transactions.userid,users.fullname from customers INNER JOIN accounts ON customers.custid=accounts.coutomerid INNER JOIN transactions ON accounts.accountnumber=transactions.accounnumber INNER JOIN users on transactions.userid=users.userid WHERE transactions.createdon BETWEEN '$datefrom' AND '$dateto' ORDER BY transactions.transactionid DESC;";
-}else {
+} else {
     $sql_transactions = "SELECT firstname,lastname,dob,nationalid,photo,address,customers.email,customers.phonenumber,accounts.accountnumber as accn,transactions.balance,
 amount,transactiontype,transactions.createdon,transactions.userid,users.fullname from customers INNER JOIN accounts ON customers.custid=accounts.coutomerid INNER JOIN transactions ON accounts.accountnumber=transactions.accounnumber INNER JOIN users on transactions.userid=users.userid ORDER BY transactions.transactionid DESC;";
-} 
+}
 
 $result = $mysqli->query($sql_transactions);
+$count_credits = 0;
+$count_debits = 0;
+$html_credits='';
+$html_debits='';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,7 +28,7 @@ $result = $mysqli->query($sql_transactions);
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ambs :: teller dashboard</title>
+    <title>Ambs :: manager dashboard</title>
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
@@ -71,52 +75,77 @@ $result = $mysqli->query($sql_transactions);
                         ?>
                         <div class="row">
                             <div class="col-6">
-                                <h4>Transaction report</h4>
+                                <h4>Total debit and credit report</h4>
                             </div>
                             <div class="col-6">
-                              
-                                    <form action="reports.php" method="get">
+
+                                <form action="reports.php" method="get">
                                     <div class="d-flex justify-content-between">
                                         From: <input type="date" name="from" required>
-                                         <span>~</span>
                                         To: <input type="date" name="to" required>
-                                        <button type="submit"name="filterdata" class="btn btn-success"><i class="fa fa-filter" aria-hidden="true"></i> Filter</button>
+                                        <button type="submit" name="filterdata" class="btn btn-success"><i class="fa fa-filter" aria-hidden="true"></i> Filter</button>
                                     </div>
-                                    </form>
-                                
+                                </form>
+
                             </div>
                         </div>
                         <hr>
-                        <table id="example" class="table table-stripped">
+                        <table id="example" class="table">
                             <thead>
                                 <tr>
-                                    <th>Full name</th>
+                                    <th>Customer name</th>
                                     <th>Phone number</th>
                                     <th>Account number</th>
-                                    <th>Transaction amount</th>
+                                    <th>Amount</th>
                                     <th>Created by</th>
-                                    <th>Transaction date</th>
+                                    <th>Created on</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php
                                 if ($result->num_rows > 0) {
                                     while ($row = $result->fetch_array()) {
-                                        echo '<tr>
-                                                <td>' . $row['firstname'] . ' ' . $row['lastname'] . '</td>
-                                                <td>' . $row['phonenumber'] . '</td>
-                                                <td>' . $row['accn'] . '</td>
-                                                <td>' . $row['amount'] . '</td>
-                                                <td>'.$row['fullname'].'</td>
-                                                <td>' . $row['createdon'] . '</td>
-                                                </tr>';
+                                        if ($row['transactiontype'] == 'deposit') {
+                                            $count_credits ++;
+                                            $html_credits.='<tr>
+                                            <td>' . $row['firstname'] . ' ' . $row['lastname'] . '</td>
+                                            <td>' . $row['phonenumber'] . '</td>
+                                            <td>' . $row['accn'] . '</td>
+                                            <td>' . $row['amount'] . '</td>
+                                            <td>' . $row['fullname'] . '</td>
+                                            <td>' . $row['createdon'] . '</td>
+                                            </tr>';
+                                        } else {
+                                            $count_debits ++;
+                                            $html_debits.='<tr>
+                                            <td>' . $row['firstname'] . ' ' . $row['lastname'] . '</td>
+                                            <td>' . $row['phonenumber'] . '</td>
+                                            <td>' . $row['accn'] . '</td>
+                                            <td>' . $row['amount'] . '</td>
+                                            <td>' . $row['fullname'] . '</td>
+                                            <td>' . $row['createdon'] . '</td>
+                                            </tr>';
+                                        }
                                     }
+                                    echo '<tr ><td colspan="6"><b>All credits</b></td></tr>'.$html_credits;
+                                     
+                                    echo '<tr ><td colspan="6"><b>All debits</b></td></tr>'.$html_debits;
                                 } else {
-                                    echo '<tr ><td rowspan="6">No data found</td></tr>';
+                                    echo '<tr ><td colspa="6">No data found</td></tr>';
                                 }
                                 ?>
                             </tbody>
                         </table>
+                        <div class="card card-footer">
+                            <div class="row">
+                                <div class="col-6">
+                                    <b>Total credit tranactions: <?php echo $count_credits ?></b>
+                                </div>
+                                <div class="col-6">
+                                    <b>Total debit transactions: <?php echo $count_debits ?></b>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -128,11 +157,11 @@ $result = $mysqli->query($sql_transactions);
 
 
     <script type="text/javascript">
-        $("#example").DataTable({
-            "responsive": true,
-            "autoWidth": false,
-            "lengthMenu": [10]
-        });
+        // $("#example").DataTable({
+        //     "responsive": true,
+        //     "autoWidth": false,
+        //     "lengthMenu": [10]
+        // });
     </script>
 </body>
 
