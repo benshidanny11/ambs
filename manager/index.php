@@ -2,7 +2,7 @@
 include("../database/connect.php");
 include("../displayerrors.php");
 include("./checkuser.php");
-$sql_all_customers = "SELECT * from customers ORDER BY custid DESC";
+$sql_all_customers = "SELECT * from customers INNER JOIN accounts ON customers.custid=accounts.coutomerid ORDER BY custid DESC";
 $result = $mysqli->query($sql_all_customers);
 ?>
 <!DOCTYPE html>
@@ -17,7 +17,9 @@ $result = $mysqli->query($sql_all_customers);
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" />
     <link rel="stylesheet" href="../assets/styles/styles.css">
+    
 </head>
 
 <body>
@@ -69,13 +71,13 @@ $result = $mysqli->query($sql_all_customers);
                             </div>
                         </div>
                         <hr>
-                        <table class="table table-stripped">
+                        <table class="table table-stripped" id="tbl-accounts">
                             <thead>
                                 <tr>
                                     <th>Image</th>
-                                    <th>First name</th>
-                                    <th>Last name</th>
+                                    <th>Full name</th>
                                     <th>Phone number</th>
+                                    <th>Account number</th>
                                     <th>Address</th>
                                     <th>Options</th>
                                 </tr>
@@ -87,18 +89,18 @@ $result = $mysqli->query($sql_all_customers);
                                     while ($row = $result->fetch_array()) {
                                         echo '<tr>
                                                                <td><img src="' . $row['photo'] . '" width="50" height="50"/></td>
-                                                               <td>' . $row['firstname'] . '</td>
-                                                               <td>' . $row['lastname'] . '</td>
+                                                               <td>' . $row['firstname'] . ' ' . $row['lastname'] . '</td>
                                                                <td>' . $row['phonenumber'] . '</td>
+                                                               <td>' . $row['accountnumber'] . '</td>
                                                                <td>' . $row['address'] . '</td>
                                                                <td><div>
                                                                    <a href="customer.php?cid=' . $row['custid'] . '" class="btn btn-primary">View details</a>
                                                                    <a href="accountstatement.php?cid=' . $row['custid'] . '" class="btn btn-success">Account statement</a>
                                                                    </div></td>
-                                                             <tr/>';
+                                                             </tr>';
                                     }
                                 } else {
-                                    echo '<tr ><td rowspan="6">No data found</td><tr/>';
+                                    echo '<tr ><td rowspan="6">No data found</td></tr>';
                                 }
                                 ?>
 
@@ -109,7 +111,18 @@ $result = $mysqli->query($sql_all_customers);
             </div>
         </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+
+
+    <script type="text/javascript">
+        $("#tbl-accounts").DataTable({
+            "responsive": true,
+            "autoWidth": false,
+            "lengthMenu": [10]
+        });
+    </script>
 </body>
 
 </html>

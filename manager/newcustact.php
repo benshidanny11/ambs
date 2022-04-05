@@ -29,9 +29,8 @@ if(isset($_POST['submit'])){
                     $tempname = $_FILES["photo"]["tmp_name"];
                     $folder = "uploads/" . $filename;
                     
-                    echo "Hello there";
-                    $insertcustomer = "INSERT INTO customers(firstname,lastname,dob,nationalid,photo,address,email,phonenumber) 
-                                      VALUES('$firstname','$lastname','$dob','$nationalid','$folder','$address','$email','$phone')";
+                    $insertcustomer = "INSERT INTO customers(firstname,lastname,dob,nationalid,photo,address,email,phonenumber,cstatus) 
+                                      VALUES('$firstname','$lastname','$dob','$nationalid','$folder','$address','$email','$phone','1')";
         
                     if (move_uploaded_file($tempname, $folder)) {
                         if ($mysqli->query($insertcustomer) === TRUE) {

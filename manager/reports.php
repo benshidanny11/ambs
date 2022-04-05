@@ -2,7 +2,7 @@
 include("../database/connect.php");
 include("../displayerrors.php");
 include("./checkuser.php");
-if (isset($_GET['from'])) {
+if (isset($_GET['from'])&& strlen($_GET['from'])>0) {
     $date = date_create("2013-03-15");
     date_format(date_create("2013-03-15"), "Y/m/d H:i:s");
 
@@ -74,10 +74,10 @@ $html_debits='';
                         }
                         ?>
                         <div class="row">
-                            <div class="col-6">
-                                <h4>Total debit and credit report</h4>
+                            <div class="col-3">
+                                <h4>Overall report</h4>
                             </div>
-                            <div class="col-6">
+                            <div class="col-7">
 
                                 <form action="reports.php" method="get">
                                     <div class="d-flex justify-content-between">
@@ -87,6 +87,9 @@ $html_debits='';
                                     </div>
                                 </form>
 
+                            </div>
+                            <div class="col-2">
+                                 <a  class="btn btn-success" href="../export/exportreport.php?from=<?php echo isset($_GET['from'])?$_GET['from']:''; ?>&to=<?php echo isset($_GET['from'])?$_GET['to']:''; ?>" target="_blank"><i class="fa fa-share" aria-hidden="true"></i> Export report</a>
                             </div>
                         </div>
                         <hr>
@@ -106,7 +109,7 @@ $html_debits='';
                                 if ($result->num_rows > 0) {
                                     while ($row = $result->fetch_array()) {
                                         if ($row['transactiontype'] == 'deposit') {
-                                            $count_credits ++;
+                                            $count_credits +=$row['amount'];
                                             $html_credits.='<tr>
                                             <td>' . $row['firstname'] . ' ' . $row['lastname'] . '</td>
                                             <td>' . $row['phonenumber'] . '</td>
@@ -116,7 +119,7 @@ $html_debits='';
                                             <td>' . $row['createdon'] . '</td>
                                             </tr>';
                                         } else {
-                                            $count_debits ++;
+                                            $count_debits +=$row['amount'];
                                             $html_debits.='<tr>
                                             <td>' . $row['firstname'] . ' ' . $row['lastname'] . '</td>
                                             <td>' . $row['phonenumber'] . '</td>
@@ -138,11 +141,14 @@ $html_debits='';
                         </table>
                         <div class="card card-footer">
                             <div class="row">
-                                <div class="col-6">
-                                    <b>Total credit tranactions: <?php echo $count_credits ?></b>
+                                <div class="col-4">
+                                    <b>Total credit tranactions: <?php echo $count_credits; ?> RWF</b>
                                 </div>
-                                <div class="col-6">
-                                    <b>Total debit transactions: <?php echo $count_debits ?></b>
+                                <div class="col-4">
+                                    <b>Total debit transactions: <?php echo $count_debits; ?> RWF</b>  
+                                </div>
+                                <div class="col-4">
+                                    <b>All transactions amount: <?php echo $count_credits+$count_debits; ?> RWF</b>  
                                 </div>
                             </div>
                         </div>
@@ -157,11 +163,6 @@ $html_debits='';
 
 
     <script type="text/javascript">
-        // $("#example").DataTable({
-        //     "responsive": true,
-        //     "autoWidth": false,
-        //     "lengthMenu": [10]
-        // });
     </script>
 </body>
 

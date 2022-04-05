@@ -2,7 +2,7 @@
 include("../database/connect.php");
 include("../displayerrors.php");
 $acc_n=$_GET['accn'];
-$sql = "SELECT firstname,lastname from customers INNER JOIN accounts ON customers.custid=accounts.coutomerid WHERE accounts.accountnumber='$acc_n' LIMIT 1" ;
+$sql = "SELECT firstname,lastname,accounts.balance from customers INNER JOIN accounts ON customers.custid=accounts.coutomerid WHERE accounts.accountnumber='$acc_n' LIMIT 1" ;
 
 $result =$mysqli->query($sql);
 $row = $result->fetch_assoc();

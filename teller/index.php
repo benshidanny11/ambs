@@ -17,7 +17,7 @@ $result = $mysqli->query($sql_all_customers);
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" />
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
 
@@ -87,6 +87,10 @@ $result = $mysqli->query($sql_all_customers);
                                                         <label>Customer name</label>
                                                         <input type="text" placeholder="Customer name" name="customername" id="custname" class="form-control" required readonly />
                                                     </div>
+                                                    <div class="form-group">
+                                                        <label>Balance</label>
+                                                        <input type="text" placeholder="Account balance" name="balance" id="accountbalance" class="form-control" required readonly />
+                                                    </div>
 
                                                     <div class="form-group">
                                                         <label>Transaction type</label>
@@ -101,11 +105,8 @@ $result = $mysqli->query($sql_all_customers);
                                                         <label>Amount</label>
                                                         <input type="number" placeholder="Amount" name="amount" class="form-control" required />
                                                     </div>
-
-
-
                                                     <div class="form-group">
-                                                        <input class="btn btn-primary" type="submit" value="Confirm transaction" name="submit">
+                                                        <input class="btn btn-primary" type="submit" value="Confirm transaction" name="submit" required>
                                                     </div>
                                                 </form>
                                             </div>
@@ -151,7 +152,9 @@ $result = $mysqli->query($sql_all_customers);
                         type: "GET",
                         url: './findcustomer.php?accn='+e.target.value,
                         success: function(response) {
+                        //balance
                          $("#custname").val(`${response.firstname} ${response.lastname}`)
+                         $("#accountbalance").val(response.balance)
                         },
                         error: (error) => {
                             console.log(error)
