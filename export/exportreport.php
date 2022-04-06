@@ -10,7 +10,7 @@ function Header()
 {
     $this->SetFont('Arial','B',15);
     $this->SetTextColor(255,192,203);
-    $this->RotatedText(8,100,'A M B S report',90);
+    $this->RotatedText(8,100,'A M B S   R E P O R T',90);
   
     // Logo
     // $this->Image('./img/logo.png',10,6,30);
